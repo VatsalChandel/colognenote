@@ -55,12 +55,12 @@ dependency-ordered. Each box is one task; the italic line is what "done" means.
 
 ## Milestone 1 — Auth & onboarding
 
-- [ ] **1.1 Sign up** — email + password, choose username + display name; handle taken-username / invalid-email / weak-password errors. *New account creates an `auth.users` row and (via trigger) a profile.*
-- [ ] **1.2 Log in** — email + password; "forgot password" → reset email. *Valid creds sign in; bad creds show a clear error.*
-- [ ] **1.3 Session handling** — persist session, auto-login on relaunch, token refresh; logout clears all state. *Relaunch stays signed in; logout returns to auth.*
-- [ ] **1.4 Profile setup (first run)** — confirm username/display name, upload avatar to storage. *Profile row is complete; avatar URL saved.*
-- [ ] **1.5 Empty state** — value one-liner + faded sample-shelf; "Add your first fragrance" → Add flow. *Zero-bottle users land here with an obvious first action.*
-- [ ] **1.6 Root routing** — unauthenticated → auth; authed + incomplete profile → setup; authed + zero bottles → empty state; else → Collection. *Each state routes correctly on launch.*
+- [x] **1.1 Sign up** — email + password, choose username + display name; handle taken-username / invalid-email / weak-password errors. *New account creates an `auth.users` row and (via trigger) a profile.* — signup collects email + password + display name; **username is picked in profile setup (1.4), not here** — avoids the trigger's uniqueness landmine and gives 1.4 a real job. `AuthViewModel.friendlyMessage` maps invalid-email / weak-password / already-exists.
+- [x] **1.2 Log in** — email + password; "forgot password" → reset email. *Valid creds sign in; bad creds show a clear error.* — `ForgotPasswordView` sends `resetPasswordForEmail`; the reset link opens Supabase's hosted page (in-app deep-link reset deferred).
+- [x] **1.3 Session handling** — persist session, auto-login on relaunch, token refresh; logout clears all state. *Relaunch stays signed in; logout returns to auth.* — handled by `SessionStore` observing `authStateChanges`; verified log out → auth, sign in → straight to Collection.
+- [x] **1.4 Profile setup (first run)** — confirm username/display name, upload avatar to storage. *Profile row is complete; avatar URL saved.* — username validated locally + via `username_available` RPC (debounced), graceful fallback if the RPC/network is unavailable; avatar downscaled to 512px, uploaded to `avatars/<uid>/…`, path stored in `avatar_url`.
+- [x] **1.5 Empty state** — value one-liner + faded sample-shelf; "Add your first fragrance" → Add flow. *Zero-bottle users land here with an obvious first action.* — `CollectionView` empty branch + `SampleShelfBackdrop`. Add flow is a placeholder until M2.
+- [x] **1.6 Root routing** — unauthenticated → auth; authed + incomplete profile → setup; authed + zero bottles → empty state; else → Collection. *Each state routes correctly on launch.* — `SessionStore.Phase` (loading / signedOut / needsProfileSetup / ready) drives `RootView`. Zero-bottles is the Collection screen's empty state, not a separate route. "Incomplete profile" = `username` still matches the trigger placeholder `user_<8 hex>`.
 
 ---
 

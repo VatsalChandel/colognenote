@@ -15,14 +15,13 @@ struct ProfileRepository {
             .value
     }
 
-    func profileExists(username: String) async throws -> Bool {
-        let count = try await supabase
-            .from(Table.profiles)
-            .select("id", head: true, count: .exact)
-            .eq("username", value: username)
+    /// Is this username free? Uses the `username_available` SECURITY DEFINER function
+    /// (docs/1-auth-support.sql) because Phase 1 RLS hides other users' profile rows.
+    func usernameAvailable(_ candidate: String) async throws -> Bool {
+        try await supabase
+            .rpc("username_available", params: ["candidate": candidate])
             .execute()
-            .count
-        return (count ?? 0) > 0
+            .value
     }
 
     /// First-run setup and Settings → Edit profile.
