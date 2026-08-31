@@ -1,5 +1,10 @@
 import Foundation
 
+/// "1 wear" / "3 wears" — plain, no localization catalog needed.
+func pluralized(_ count: Int, _ singular: String, _ plural: String? = nil) -> String {
+    "\(count) \(count == 1 ? singular : (plural ?? singular + "s"))"
+}
+
 extension String {
     var trimmed: String {
         trimmingCharacters(in: .whitespacesAndNewlines)

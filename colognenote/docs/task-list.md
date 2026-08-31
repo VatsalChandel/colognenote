@@ -93,10 +93,10 @@ dependency-ordered. Each box is one task; the italic line is what "done" means.
 
 ## Milestone 4 — Insights
 
-- [ ] **4.1 Insight queries** — most-worn, most-neglected, best performers, cost-per-wear ranked, accord breakdown (by family), wardrobe gaps, value + count. *All computed on read.*
-- [ ] **4.2 Insights screen** — cards + charts (charts run on accord families, not raw notes). *Renders the queries above.*
-- [ ] **4.3 Cold-start empty state** — "not enough data yet" shown to new users. *No broken charts on an empty collection.*
-- [ ] **4.4 Tap-through** — any insight row → that bottle's detail. *Navigation works.*
+- [x] **4.1 Insight queries** — most-worn, most-neglected, best performers, cost-per-wear ranked, accord breakdown (by family), wardrobe gaps, value + count. *All computed on read.* — `InsightsViewModel` fans out ~6 fetches then derives rankings in memory; `wears.statsByItem()` / `compliments.complimentCountsByItem()` added.
+- [x] **4.2 Insights screen** — cards + charts (charts run on accord families, not raw notes). *Renders the queries above.* — card stack + Swift Charts horizontal `BarMark` over the 16 families; empty cards (e.g. best performers with 0 compliments) are hidden.
+- [x] **4.3 Cold-start empty state** — "not enough data yet" shown to new users. *No broken charts on an empty collection.* — shown when there are no active items OR zero wears logged.
+- [x] **4.4 Tap-through** — any insight row → that bottle's detail. *Navigation works.* — each row is a `NavigationLink(value: itemID)` → `BottleDetailView`; verified.
 
 ---
 

@@ -25,6 +25,25 @@ struct WearLogRepository {
             .value
     }
 
+    /// Wear tally + most-recent wear date per item — for Insights.
+    func statsByItem() async throws -> (counts: [UUID: Int], lastWorn: [UUID: String]) {
+        struct Row: Decodable { let collectionItemId: UUID; let wornOn: String }
+        let rows: [Row] = try await supabase
+            .from(Table.wearLogs)
+            .select("collection_item_id, worn_on")
+            .execute()
+            .value
+        var counts: [UUID: Int] = [:]
+        var lastWorn: [UUID: String] = [:]
+        for row in rows {
+            counts[row.collectionItemId, default: 0] += 1
+            if row.wornOn > (lastWorn[row.collectionItemId] ?? "") {
+                lastWorn[row.collectionItemId] = row.wornOn
+            }
+        }
+        return (counts, lastWorn)
+    }
+
     func wearCount(itemID: UUID) async throws -> Int {
         let count = try await supabase
             .from(Table.wearLogs)

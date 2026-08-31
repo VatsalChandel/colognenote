@@ -13,6 +13,17 @@ struct ComplimentRepository {
             .value
     }
 
+    /// Compliment tally per collection item — for Insights "best performers".
+    func complimentCountsByItem() async throws -> [UUID: Int] {
+        struct Row: Decodable { let collectionItemId: UUID }
+        let rows: [Row] = try await supabase
+            .from(Table.compliments)
+            .select("collection_item_id")
+            .execute()
+            .value
+        return Dictionary(grouping: rows, by: \.collectionItemId).mapValues(\.count)
+    }
+
     func complimentCount(itemID: UUID) async throws -> Int {
         let count = try await supabase
             .from(Table.compliments)

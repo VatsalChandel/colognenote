@@ -94,7 +94,7 @@ struct CollectionView: View {
 
     private var header: some View {
         HStack {
-            Text("^[\(model.value?.itemCount ?? model.allItems.count) bottle](inflect: true)")
+            Text(pluralized(model.value?.itemCount ?? model.allItems.count, "bottle"))
                 .font(.subheadline.weight(.semibold))
             if let total = model.value?.totalValue {
                 Text("· \(total.formatted(.currency(code: "USD").precision(.fractionLength(0))))")
