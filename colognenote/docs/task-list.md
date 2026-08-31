@@ -66,17 +66,17 @@ dependency-ordered. Each box is one task; the italic line is what "done" means.
 
 ## Milestone 2 — Collection · Add · Detail (the catalog spine)
 
-- [ ] **2.1 Collection grid** — `LazyVGrid` of bottle cards (photo, name, house, rating); header shows count + total value **[PRIVATE]**. *Owner's active items render.*
-- [ ] **2.2 Sort / filter / search** — sort (rating / recent / most-worn / house / accord / cost-per-wear); filter (house / accord / status); live search. *Each control reorders/filters the grid.*
-- [ ] **2.3 Long-press context menu** — `.contextMenu` on a card: quick Log wear / Log compliment. *Both open the correct sheet without opening detail.*
-- [ ] **2.4 Add — step 1 (find it)** — search canonical; select a result; "add manually" → free-text name/house/concentration creating a `personal`/`pending` fragrance. *Both paths yield a fragrance to attach.*
-- [ ] **2.5 Add — step 2 (your details)** — price → `collection_item_costs`, size, purchase date/location, batch, rating (1–5), photo upload; Save creates the CollectionItem. *New bottle appears in Collection.*
-- [ ] **2.6 Edit fragrance** — reopen the form prefilled; update item + cost. *Edits persist.*
-- [ ] **2.7 Bottle detail** — all fields, notes + accords (read-only, inherited), stats (worn, compliments, cost-per-wear **[PRIVATE]**), wear-history list, compliments list. *Everything about one bottle in one screen.*
-- [ ] **2.8 Change status** — active / finished / sold, with confirm on finished/sold. *Status updates; item leaves the active value total but keeps history.*
-- [ ] **2.9 Adjust fill level** — manual slider (0–100%). *Value persists.*
-- [ ] **2.10 Delete item** — with confirmation (mistake case). *Item and its cost row are removed.*
-- [ ] **2.11 States** — loading / empty / error for Collection and Detail. *No blank or crashing screens.*
+- [x] **2.1 Collection grid** — `LazyVGrid` of bottle cards (photo, name, house, rating); header shows count + total value **[PRIVATE]**. *Owner's active items render.* — header uses the `my_collection_value` view; verified "1 bottle · $128" after an add.
+- [x] **2.2 Sort / filter / search** — sort (rating / recent / most-worn / house / accord / cost-per-wear); filter (house / accord / status); live search. *Each control reorders/filters the grid.* — sort menu = recent/rating/most-worn/house/cost-per-wear (accord is a *filter*, not a sort). Per-item wear counts + prices + accords stitched on read in `CollectionViewModel`. `.searchable` on name/house.
+- [x] **2.3 Long-press context menu** — `.contextMenu` on a card: quick Log wear / Log compliment. *Both open the correct sheet without opening detail.* — menu wired; opens the log sheets (placeholders until M3 fills them in — see 3.5).
+- [x] **2.4 Add — step 1 (find it)** — search canonical; select a result; "add manually" → free-text name/house/concentration creating a `personal`/`pending` fragrance. *Both paths yield a fragrance to attach.* — debounced ILIKE search verified against the live catalog.
+- [x] **2.5 Add — step 2 (your details)** — price → `collection_item_costs`, size, purchase date/location, batch, rating (1–5), photo upload; Save creates the CollectionItem. *New bottle appears in Collection.* — verified: Sauvage added, cost row written, card + header updated.
+- [x] **2.6 Edit fragrance** — reopen the form prefilled; update item + cost. *Edits persist.* — `AddFragranceView(editing:cost:)` jumps straight to step 2 prefilled; from the detail ⋯ menu.
+- [x] **2.7 Bottle detail** — all fields, notes + accords (read-only, inherited), stats (worn, compliments, cost-per-wear **[PRIVATE]**), wear-history list, compliments list. *Everything about one bottle in one screen.* — verified: accord chips + full pyramid render from the joins; pinned Log wear / Compliment action bar.
+- [x] **2.8 Change status** — active / finished / sold, with confirm on finished/sold. *Status updates; item leaves the active value total but keeps history.* — ⋯ → Status submenu; confirmation dialog on finished/sold.
+- [x] **2.9 Adjust fill level** — manual slider (0–100%). *Value persists.* — commits on drag-end.
+- [x] **2.10 Delete item** — with confirmation (mistake case). *Item and its cost row are removed.* — cost row cascades; the dialog nudges toward Finished/Sold to keep history.
+- [x] **2.11 States** — loading / empty / error for Collection and Detail. *No blank or crashing screens.* — plus a "nothing matches" state when filters exclude everything.
 
 ---
 

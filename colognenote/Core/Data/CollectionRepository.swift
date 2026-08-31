@@ -61,7 +61,29 @@ struct CollectionRepository {
         return rows.first
     }
 
+    /// Wear tally per collection item, for the grid's "most worn" / cost-per-wear sorts.
+    /// Computed on read — fine at Phase 1 sizes.
+    func wearCountsByItem() async throws -> [UUID: Int] {
+        struct Row: Decodable { let collectionItemId: UUID }
+        let rows: [Row] = try await supabase
+            .from(Table.wearLogs)
+            .select("collection_item_id")
+            .execute()
+            .value
+        return Dictionary(grouping: rows, by: \.collectionItemId).mapValues(\.count)
+    }
+
     // MARK: Cost (isolated, owner-only table) **[PRIVATE]**
+
+    /// Price per item (owner-only). **[PRIVATE]**
+    func pricesByItem() async throws -> [UUID: Decimal] {
+        let costs: [CollectionItemCost] = try await supabase
+            .from(Table.collectionItemCosts)
+            .select()
+            .execute()
+            .value
+        return Dictionary(costs.map { ($0.collectionItemId, $0.price) }, uniquingKeysWith: { a, _ in a })
+    }
 
     func cost(itemID: UUID) async throws -> CollectionItemCost? {
         let rows: [CollectionItemCost] = try await supabase

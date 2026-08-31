@@ -63,6 +63,19 @@ struct FragranceRepository {
             .value
     }
 
+    /// Accord family names keyed by fragrance id — for enriching the collection grid.
+    func accordFamiliesByFragrance(ids: [UUID]) async throws -> [UUID: [String]] {
+        guard !ids.isEmpty else { return [:] }
+        let rows: [FragranceAccord] = try await supabase
+            .from(Table.fragranceAccords)
+            .select()
+            .in("fragrance_id", values: ids.map(\.uuidString))
+            .execute()
+            .value
+        return Dictionary(grouping: rows, by: \.fragranceId)
+            .mapValues { $0.map(\.familyName).sorted() }
+    }
+
     /// "Add it manually" path — creates a `personal` / `pending` fragrance owned by the caller.
     func createPersonal(
         name: String,
