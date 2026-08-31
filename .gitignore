@@ -1,0 +1,31 @@
+# ── Secrets — never commit ───────────────────────────────
+keys
+Secrets.xcconfig
+*.local.xcconfig
+Secrets.plist
+Secrets.swift
+
+# ── macOS ────────────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ── Xcode: user-specific state ───────────────────────────
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+*.xccheckout
+
+# ── Xcode: build output ──────────────────────────────────
+build/
+DerivedData/
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# ── Swift Package Manager ────────────────────────────────
+.build/
+.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+# Package.resolved IS committed on purpose (reproducible dependency versions).

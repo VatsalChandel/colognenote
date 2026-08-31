@@ -9,9 +9,14 @@ import SwiftUI
 
 @main
 struct colognenoteApp: App {
+    @State private var session = SessionStore()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView()
+                .environment(session)
+                .task { await session.start() }
+                .task { await ConnectivityProbe.run() }
         }
     }
 }
