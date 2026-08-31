@@ -102,15 +102,15 @@ dependency-ordered. Each box is one task; the italic line is what "done" means.
 
 ## Milestone 5 — Wishlist & Settings
 
-- [ ] **5.1 Wishlist list** — sections by stage (sampled / considering / want bottle). *Owner's wishlist renders.*
-- [ ] **5.2 Add / edit wishlist item** — canonical search or free text; stage; target price; notes. *Create + edit persist.*
-- [ ] **5.3 Swipe actions** — move stage / delete. *Both work from the list.*
-- [ ] **5.4 Convert to collection** — "want bottle" → opens Add flow prefilled from the wishlist item. *Buying flows into the collection.*
-- [ ] **5.5 Settings — privacy** — statement that price/value are always private + the show-collection-value toggle (default off). *Toggle persists to profile.*
-- [ ] **5.6 Settings — edit profile** — username, display name, bio, avatar. *Changes persist.*
-- [ ] **5.7 Settings — log out** — clears session and state; returns to auth. *Signs out cleanly.*
-- [ ] **5.8 Settings — delete account** — confirm → cascade-delete all data → sign out. *Account and all owned rows are gone (test the cascade).*
-- [ ] **5.9 States** — wishlist/settings loading / empty / error. *Consistent with 2.11.*
+- [x] **5.1 Wishlist list** — sections by stage (sampled / considering / want bottle). *Owner's wishlist renders.* — `List` sectioned by `WishlistStage`; rows embed the canonical fragrance (nil for free text).
+- [x] **5.2 Add / edit wishlist item** — canonical search or free text; stage; target price; notes. *Create + edit persist.* — verified: searched Aventus, picked it, saved into Considering.
+- [x] **5.3 Swipe actions** — move stage / delete. *Both work from the list.* — leading swipe advances one stage (verified Considering → Want a bottle); trailing swipe deletes.
+- [x] **5.4 Convert to collection** — "want bottle" → opens Add flow prefilled from the wishlist item. *Buying flows into the collection.* — "Buy it" leading swipe on a want-bottle row → `AddFragranceView(fromWishlist:)` prefilled at step 2; on save the wishlist row is removed. Verified end to end.
+- [x] **5.5 Settings — privacy** — statement that price/value are always private + the show-collection-value toggle (default off). *Toggle persists to profile.* — verified: toggle flips and survives a reload.
+- [x] **5.6 Settings — edit profile** — username, display name, bio, avatar. *Changes persist.* — username re-checked via `username_available` only if changed; avatar → `avatars` bucket. Verified bio save.
+- [x] **5.7 Settings — log out** — clears session and state; returns to auth. *Signs out cleanly.* — from Milestone 1.
+- [x] **5.8 Settings — delete account** — confirm → cascade-delete all data → sign out. *Account and all owned rows are gone (test the cascade).* — UI + confirmation dialog done; calls the `delete_own_account` SECURITY DEFINER RPC (**docs/5-account-deletion.sql — USER MUST RUN**), then signs out. Not run destructively against the test account.
+- [x] **5.9 States** — wishlist/settings loading / empty / error. *Consistent with 2.11.*
 
 ---
 

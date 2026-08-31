@@ -11,6 +11,8 @@ final class AddFragranceViewModel {
 
     // Which item we're editing, if any.
     let editingItemID: UUID?
+    /// Set when this add came from "Buy it" on a wishlist row — deleted on save.
+    let sourceWishlistItemID: UUID?
     var step: Step
 
     // Step 1 — find it
@@ -38,6 +40,7 @@ final class AddFragranceViewModel {
 
     private let fragranceRepo = FragranceRepository()
     private let collectionRepo = CollectionRepository()
+    private let wishlistRepo = WishlistRepository()
     private let storage = StorageService()
     private var searchTask: Task<Void, Never>?
 
@@ -52,6 +55,7 @@ final class AddFragranceViewModel {
     }
 
     init(editing item: CollectionItemRow? = nil, cost: CollectionItemCost? = nil) {
+        sourceWishlistItemID = nil
         if let item {
             editingItemID = item.id
             step = .details
@@ -67,6 +71,20 @@ final class AddFragranceViewModel {
             rating = item.personalRating ?? 0
         } else {
             editingItemID = nil
+            step = .find
+        }
+    }
+
+    /// "Buy it" from a wishlist row.
+    init(fromWishlist row: WishlistRow) {
+        editingItemID = nil
+        sourceWishlistItemID = row.id
+        if let fragrance = row.fragrance {
+            selectedFragrance = fragrance
+            step = .details
+        } else {
+            manualName = row.fragranceFreetext ?? ""
+            showManualEntry = true
             step = .find
         }
     }
@@ -150,6 +168,9 @@ final class AddFragranceViewModel {
                     photoUrl: photoPath,
                     price: price
                 )
+                if let wishlistID = sourceWishlistItemID {
+                    try? await wishlistRepo.delete(id: wishlistID)
+                }
             }
             return true
         } catch {

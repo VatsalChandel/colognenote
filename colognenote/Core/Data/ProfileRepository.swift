@@ -50,6 +50,12 @@ struct ProfileRepository {
             .value
     }
 
+    /// Deletes the caller's auth user via the `delete_own_account` RPC
+    /// (docs/5-account-deletion.sql). Everything owned cascades. Sign out after.
+    func deleteAccount() async throws {
+        try await supabase.rpc("delete_own_account").execute()
+    }
+
     private struct ProfilePatch: Encodable {
         let username: String?
         let displayName: String?

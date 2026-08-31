@@ -1,7 +1,32 @@
 import Foundation
 import Supabase
 
+/// A wishlist item with its canonical fragrance embedded (nil for free-text entries).
+struct WishlistRow: Codable, Identifiable, Hashable, Sendable {
+    let id: UUID
+    let userId: UUID
+    var fragranceId: UUID?
+    var fragranceFreetext: String?
+    var stage: WishlistStage
+    var targetPrice: Decimal?
+    var notes: String?
+    var createdAt: Date?
+    var fragrance: Fragrance?
+
+    var displayName: String { fragrance?.name ?? fragranceFreetext ?? "Untitled" }
+    var displayHouse: String? { fragrance?.house }
+}
+
 struct WishlistRepository {
+
+    func rows() async throws -> [WishlistRow] {
+        try await supabase
+            .from(Table.wishlistItems)
+            .select("*, fragrance:fragrances(*)")
+            .order("created_at", ascending: false)
+            .execute()
+            .value
+    }
 
     func items() async throws -> [WishlistItem] {
         try await supabase
@@ -39,11 +64,19 @@ struct WishlistRepository {
 
     func update(
         id: UUID,
-        stage: WishlistStage? = nil,
-        targetPrice: Decimal? = nil,
-        notes: String? = nil
+        fragranceID: UUID?,
+        freeText: String?,
+        stage: WishlistStage,
+        targetPrice: Decimal?,
+        notes: String?
     ) async throws {
-        let patch = WishlistPatch(stage: stage, targetPrice: targetPrice, notes: notes)
+        let patch = WishlistPatch(
+            fragranceId: fragranceID,
+            fragranceFreetext: freeText,
+            stage: stage,
+            targetPrice: targetPrice,
+            notes: notes
+        )
         try await supabase
             .from(Table.wishlistItems)
             .update(patch)
@@ -77,7 +110,9 @@ struct WishlistRepository {
     }
 
     private struct WishlistPatch: Encodable {
-        let stage: WishlistStage?
+        let fragranceId: UUID?
+        let fragranceFreetext: String?
+        let stage: WishlistStage
         let targetPrice: Decimal?
         let notes: String?
     }

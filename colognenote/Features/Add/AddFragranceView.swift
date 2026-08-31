@@ -11,6 +11,10 @@ struct AddFragranceView: View {
         _model = State(initialValue: AddFragranceViewModel(editing: item, cost: cost))
     }
 
+    init(fromWishlist row: WishlistRow) {
+        _model = State(initialValue: AddFragranceViewModel(fromWishlist: row))
+    }
+
     var body: some View {
         NavigationStack {
             Group {
