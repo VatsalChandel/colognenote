@@ -34,7 +34,7 @@ final class LogComplimentViewModel {
             _ = try await complimentRepo.create(
                 itemID: itemID,
                 wearLogID: attachedWearID,
-                complimentedOn: Self.dateFormatter.string(from: date),
+                complimentedOn: ISODate.string(from: date),
                 who: who.nilIfBlank,
                 comment: comment.nilIfBlank
             )
@@ -44,11 +44,4 @@ final class LogComplimentViewModel {
             return false
         }
     }
-
-    static let dateFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "yyyy-MM-dd"
-        f.locale = Locale(identifier: "en_US_POSIX")
-        return f
-    }()
 }

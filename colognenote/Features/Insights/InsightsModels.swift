@@ -5,7 +5,8 @@ struct InsightItem: Identifiable, Hashable, Sendable {
     let id: UUID            // collection item id — for tap-through
     let name: String
     let house: String?
-    let imageURL: String?
+    let photoPath: String?
+    let fallbackImageURL: String?
     let wearCount: Int
     let complimentCount: Int
     /// **[PRIVATE]**
@@ -15,10 +16,7 @@ struct InsightItem: Identifiable, Hashable, Sendable {
     let accordFamilies: [String]
 
     /// **[PRIVATE]**
-    var costPerWear: Decimal? {
-        guard let price, wearCount > 0 else { return nil }
-        return price / Decimal(wearCount)
-    }
+    var costPerWear: Decimal? { DerivedValues.costPerWear(price: price, wears: wearCount) }
 }
 
 /// Item count for one accord family — feeds the breakdown chart.

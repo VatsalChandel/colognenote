@@ -20,8 +20,18 @@ struct EditProfileView: View {
             Form {
                 Section {
                     PhotosPicker(selection: $photoItem, matching: .images) {
-                        Label(model.pickedImageData == nil ? "Change photo" : "Photo selected",
-                              systemImage: "camera")
+                        HStack(spacing: Theme.Spacing.md) {
+                            Group {
+                                if let data = model.pickedImageData, let image = UIImage(data: data) {
+                                    Image(uiImage: image).resizable().scaledToFill()
+                                } else {
+                                    RemoteImage(avatar: profile.avatarUrl)
+                                }
+                            }
+                            .frame(width: 44, height: 44)
+                            .clipShape(Circle())
+                            Text(model.pickedImageData == nil ? "Change photo" : "Photo selected")
+                        }
                     }
                 }
                 Section("Display name") {

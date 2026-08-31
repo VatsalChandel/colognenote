@@ -62,7 +62,7 @@ final class AddFragranceViewModel {
             selectedFragrance = item.fragrance
             priceText = cost.map { "\($0.price)" } ?? ""
             sizeText = item.sizeMl.map(String.init) ?? ""
-            if let date = item.purchaseDate, let parsed = Self.dateFormatter.date(from: date) {
+            if let date = item.purchaseDate, let parsed = ISODate.date(from: date) {
                 purchaseDate = parsed
                 includePurchaseDate = true
             }
@@ -136,7 +136,7 @@ final class AddFragranceViewModel {
 
         let price = priceText.isEmpty ? nil : Decimal(string: priceText)
         let size = sizeText.isEmpty ? nil : Int(sizeText)
-        let dateString = includePurchaseDate ? Self.dateFormatter.string(from: purchaseDate) : nil
+        let dateString = includePurchaseDate ? ISODate.string(from: purchaseDate) : nil
 
         do {
             var photoPath: String?
@@ -178,11 +178,4 @@ final class AddFragranceViewModel {
             return false
         }
     }
-
-    static let dateFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "yyyy-MM-dd"
-        f.locale = Locale(identifier: "en_US_POSIX")
-        return f
-    }()
 }

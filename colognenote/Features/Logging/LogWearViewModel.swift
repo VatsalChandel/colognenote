@@ -58,7 +58,7 @@ final class LogWearViewModel {
         do {
             _ = try await wearRepo.create(
                 itemID: itemID,
-                wornOn: Self.dateFormatter.string(from: date),
+                wornOn: ISODate.string(from: date),
                 occasion: occasion,
                 weatherTemp: weather?.temperature,
                 weatherCondition: weather?.condition,
@@ -71,11 +71,4 @@ final class LogWearViewModel {
             return false
         }
     }
-
-    static let dateFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "yyyy-MM-dd"
-        f.locale = Locale(identifier: "en_US_POSIX")
-        return f
-    }()
 }

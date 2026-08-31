@@ -35,10 +35,12 @@ struct CollectionView: View {
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button { showSettings = true } label: { Image(systemName: "gearshape") }
+                    .accessibilityLabel("Settings")
             }
             ToolbarItemGroup(placement: .topBarTrailing) {
                 if model.state == .ready { sortFilterMenu }
                 Button { showAdd = true } label: { Image(systemName: "plus") }
+                    .accessibilityLabel("Add a fragrance")
             }
         }
         .sheet(isPresented: $showAdd, onDismiss: { Task { await model.load() } }) {
@@ -148,6 +150,7 @@ struct CollectionView: View {
                   ? "line.3.horizontal.decrease.circle.fill"
                   : "line.3.horizontal.decrease.circle")
         }
+        .accessibilityLabel("Sort and filter")
     }
 
     // MARK: Empty (owns nothing)

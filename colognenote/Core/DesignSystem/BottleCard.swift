@@ -5,12 +5,15 @@ import SwiftUI
 struct BottleCard: View {
     var name: String
     var house: String?
-    var imageURL: String?
+    /// A user's uploaded bottle photo (private path or URL). Falls back to `fallbackImageURL`.
+    var photoPath: String?
+    /// The canonical bottle shot URL.
+    var fallbackImageURL: String?
     var rating: Int?
 
     var body: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.sm) {
-            RemoteImage(urlString: imageURL)
+            RemoteImage(bottlePhoto: photoPath, fallbackURL: fallbackImageURL)
                 .frame(maxWidth: .infinity)
                 .frame(height: 170)
                 .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.md))
@@ -42,7 +45,8 @@ extension BottleCard {
         self.init(
             name: item.fragrance.name,
             house: item.fragrance.house,
-            imageURL: item.photoUrl ?? item.fragrance.imageUrl,
+            photoPath: item.photoUrl,
+            fallbackImageURL: item.fragrance.imageUrl,
             rating: item.personalRating
         )
     }
@@ -51,9 +55,9 @@ extension BottleCard {
 #Preview {
     ScrollView {
         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: Theme.Spacing.lg) {
-            BottleCard(name: "Sauvage", house: "Dior", imageURL: nil, rating: 4)
-            BottleCard(name: "Bleu de Chanel", house: "Chanel", imageURL: nil, rating: 5)
-            BottleCard(name: "Aventus", house: "Creed", imageURL: nil, rating: nil)
+            BottleCard(name: "Sauvage", house: "Dior", rating: 4)
+            BottleCard(name: "Bleu de Chanel", house: "Chanel", rating: 5)
+            BottleCard(name: "Aventus", house: "Creed", rating: nil)
         }
         .padding()
     }

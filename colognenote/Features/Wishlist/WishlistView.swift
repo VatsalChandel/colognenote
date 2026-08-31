@@ -40,6 +40,7 @@ struct WishlistView: View {
             if model.state == .ready {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button { editing = .new } label: { Image(systemName: "plus") }
+                        .accessibilityLabel("Add to wishlist")
                 }
             }
         }

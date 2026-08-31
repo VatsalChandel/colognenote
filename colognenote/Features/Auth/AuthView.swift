@@ -70,6 +70,7 @@ struct AuthView: View {
             Image(systemName: "drop.fill")
                 .font(.system(size: 52))
                 .foregroundStyle(Theme.Palette.accent)
+                .accessibilityHidden(true)
             Text("Cologne")
                 .font(Theme.Typography.display(34))
             Text(model.title)

@@ -116,14 +116,16 @@ dependency-ordered. Each box is one task; the italic line is what "done" means.
 
 ## Milestone 6 — Cross-cutting polish & pre-ship
 
-- [ ] **6.1 Image helpers** — upload/fetch for avatars + bottle photos, with caching. *Images load quickly and don't re-fetch needlessly.*
-- [ ] **6.2 Consistent state components** — apply shared Loading/Empty/Error everywhere. *One pattern across the app.*
-- [ ] **6.3 Permissions strings** — Info.plist usage descriptions for photos + location. *No launch rejection; prompts read clearly.*
-- [ ] **6.4 Derived-value helpers** — cost-per-wear, collection value, season-from-date. *Single source of truth for each calc.*
-- [ ] **6.5 RLS verification** — confirm a second user cannot read your rows, and price never leaks via any query/view. *Manual cross-account test passes.*
-- [ ] **6.6 Accessibility** — Dynamic Type, VoiceOver labels, tap-target sizes. *Usable with larger text + VoiceOver.*
-- [ ] **6.7 App icon + launch screen.** *Present and correct.*
-- [ ] **6.8 TestFlight build** — archive, upload, internal test. *Installs from TestFlight.* (Requires the $99 Apple Developer Program.)
+- [x] **6.1 Image helpers** — upload/fetch for avatars + bottle photos, with caching. *Images load quickly and don't re-fetch needlessly.* — `ImageStore` (NSCache + URLCache + signed-URL reuse); `RemoteImage` now resolves private `bottle-photos` / `avatars` paths to signed URLs and caches them. Avatar shows in Edit Profile.
+- [x] **6.2 Consistent state components** — apply shared Loading/Empty/Error everywhere. *One pattern across the app.* — audited: Collection, Detail, Insights, Wishlist, Settings all use `LoadingView` / `ErrorView` / `EmptyStateView`.
+- [x] **6.3 Permissions strings** — Info.plist usage descriptions for photos + location. *No launch rejection; prompts read clearly.* — `NSLocationWhenInUseUsageDescription` set (verified the prompt copy on device). Photos use `PhotosPicker`, which needs no usage string.
+- [x] **6.4 Derived-value helpers** — cost-per-wear, collection value, season-from-date. *Single source of truth for each calc.* — `DerivedValues` (costPerWear, season) + `ISODate` (one "yyyy-MM-dd" formatter). Cost-per-wear collapsed from 3 copies; 3 duplicate DateFormatters removed. Season now shown in wear history. Collection value already comes from the `my_collection_value` view.
+- [x] **6.5 RLS verification** — confirm a second user cannot read your rows, and price never leaks via any query/view. *Manual cross-account test passes.* — cross-account REST test: user B gets `[]` for A's collection_items / **collection_item_costs** / wear_logs / compliments / wishlist_items / my_collection_value, sees only their own profile row; world-readable reference data still accessible. Bonus: `delete_own_account` RPC verified (204 → account gone).
+- [x] **6.6 Accessibility** — Dynamic Type, VoiceOver labels, tap-target sizes. *Usable with larger text + VoiceOver.* — `accessibilityLabel` on every icon-only button (Settings/Add/filter/⋯/wishlist-+), 44pt hit areas on the delete buttons, decorative images hidden. Dynamic Type via system text styles throughout.
+- [x] **6.7 App icon + launch screen.** *Present and correct.* — navy droplet on cream, with dark + tinted 1024px variants; asset catalog compiles the sized icons; launch screen is the generated blank (`UILaunchScreen_Generation`).
+- [ ] **6.8 TestFlight build** — archive, upload, internal test. *Installs from TestFlight.* (Requires the $99 Apple Developer Program.) — **blocked on the paid Apple Developer Program.**
+
+> Weather: the OpenWeather key is now active — log-wear capture works end to end ("24°C · Clouds" recorded on a test wear).
 
 ---
 

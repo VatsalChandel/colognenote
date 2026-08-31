@@ -93,7 +93,7 @@ struct BottleDetailView: View {
 
     private func hero(_ item: CollectionItemRow) -> some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.sm) {
-            RemoteImage(urlString: item.photoUrl ?? item.fragrance.imageUrl)
+            RemoteImage(bottlePhoto: item.photoUrl, fallbackURL: item.fragrance.imageUrl)
                 .frame(maxWidth: .infinity)
                 .frame(height: 220)
                 .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.lg))
@@ -197,16 +197,21 @@ struct BottleDetailView: View {
                     HStack {
                         VStack(alignment: .leading, spacing: 2) {
                             Text(wear.wornOn).font(.subheadline)
-                            if let occasion = wear.occasion {
-                                Text(occasion.rawValue.replacingOccurrences(of: "_", with: " ").capitalized)
-                                    .font(.caption).foregroundStyle(Theme.Palette.secondaryText)
-                            }
+                            Text([DerivedValues.season(fromISODate: wear.wornOn)?.label,
+                                  wear.occasion?.label]
+                                .compactMap { $0 }.joined(separator: " · "))
+                                .font(.caption).foregroundStyle(Theme.Palette.secondaryText)
                         }
                         Spacer()
-                        if wear.isSotd { Image(systemName: "sun.max.fill").foregroundStyle(Theme.Palette.rating) }
-                        Button(role: .destructive) { confirmDeleteWear = wear.id } label: {
-                            Image(systemName: "trash").font(.caption)
+                        if wear.isSotd {
+                            Image(systemName: "sun.max.fill")
+                                .foregroundStyle(Theme.Palette.rating)
+                                .accessibilityLabel("Scent of the day")
                         }
+                        Button(role: .destructive) { confirmDeleteWear = wear.id } label: {
+                            Image(systemName: "trash").font(.body).frame(width: 44, height: 44)
+                        }
+                        .accessibilityLabel("Delete wear from \(wear.wornOn)")
                     }
                     .padding(.vertical, Theme.Spacing.xs)
                     Divider()
@@ -232,8 +237,9 @@ struct BottleDetailView: View {
                         }
                         Spacer()
                         Button(role: .destructive) { confirmDeleteCompliment = compliment.id } label: {
-                            Image(systemName: "trash").font(.caption)
+                            Image(systemName: "trash").font(.body).frame(width: 44, height: 44)
                         }
+                        .accessibilityLabel("Delete this compliment")
                     }
                     .padding(.vertical, Theme.Spacing.xs)
                     Divider()
@@ -279,6 +285,7 @@ struct BottleDetailView: View {
             } label: {
                 Image(systemName: "ellipsis.circle")
             }
+            .accessibilityLabel("More actions")
         }
     }
 

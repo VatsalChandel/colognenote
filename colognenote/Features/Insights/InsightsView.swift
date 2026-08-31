@@ -141,7 +141,7 @@ private struct InsightRow: View {
     var body: some View {
         NavigationLink(value: item.id) {
             HStack(spacing: Theme.Spacing.md) {
-                RemoteImage(urlString: item.imageURL)
+                RemoteImage(bottlePhoto: item.photoPath, fallbackURL: item.fallbackImageURL)
                     .frame(width: 36, height: 36)
                     .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.sm))
                 VStack(alignment: .leading, spacing: 1) {

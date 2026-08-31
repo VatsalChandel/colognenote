@@ -12,7 +12,7 @@ struct SampleShelfBackdrop: View {
     var body: some View {
         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: Theme.Spacing.lg) {
             ForEach(samples, id: \.0) { name, house in
-                BottleCard(name: name, house: house, imageURL: nil, rating: nil)
+                BottleCard(name: name, house: house, rating: nil)
             }
         }
         .padding(Theme.Spacing.lg)

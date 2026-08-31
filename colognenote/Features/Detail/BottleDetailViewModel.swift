@@ -38,10 +38,7 @@ final class BottleDetailViewModel {
     var complimentCount: Int { compliments.count }
 
     /// **[PRIVATE]**
-    var costPerWear: Decimal? {
-        guard let price = cost?.price, wearCount > 0 else { return nil }
-        return price / Decimal(wearCount)
-    }
+    var costPerWear: Decimal? { DerivedValues.costPerWear(price: cost?.price, wears: wearCount) }
 
     var hasPyramid: Bool { !notesByPosition.isEmpty }
 

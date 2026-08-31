@@ -13,11 +13,8 @@ struct EnrichedItem: Identifiable, Hashable, Sendable {
     var id: UUID { row.id }
     var fragrance: Fragrance { row.fragrance }
 
-    /// **[PRIVATE]** — `price / wears`, nil until there's a price and at least one wear.
-    var costPerWear: Decimal? {
-        guard let price, wearCount > 0 else { return nil }
-        return price / Decimal(wearCount)
-    }
+    /// **[PRIVATE]**
+    var costPerWear: Decimal? { DerivedValues.costPerWear(price: price, wears: wearCount) }
 }
 
 enum CollectionSort: String, CaseIterable, Identifiable {
