@@ -82,12 +82,12 @@ dependency-ordered. Each box is one task; the italic line is what "done" means.
 
 ## Milestone 3 — Logging (the fast loop)
 
-- [ ] **3.1 Log wear sheet** — `.presentationDetents([.medium])`; date (default today), occasion picker, weather auto-filled, SOTD toggle, optional pairing; Save → WearLog. *Two-tap logging; history updates.*
-- [ ] **3.2 Delete wear** — with confirm. *Wear removed; any attached compliment goes loose.*
-- [ ] **3.3 Log compliment sheet** — attach to a recent wear or leave loose; optional who / comment; date; Save → Compliment. *Compliment appears on the bottle.*
-- [ ] **3.4 Delete compliment** — with confirm. *Compliment removed.*
-- [ ] **3.5 Wire quick-log** — connect the 2.3 context-menu entries to these sheets. *Long-press → log works end to end.*
-- [ ] **3.6 Location permission** — request for weather; graceful fallback if denied (log without weather). *No blocking if permission is refused.*
+- [x] **3.1 Log wear sheet** — `.presentationDetents([.medium])`; date (default today), occasion picker, weather auto-filled, SOTD toggle, optional pairing; Save → WearLog. *Two-tap logging; history updates.* — verified: wear logged → "Worn 1", cost-per-wear recomputed to $128.
+- [x] **3.2 Delete wear** — with confirm. *Wear removed; any attached compliment goes loose.* — trash on each history row → confirmation dialog; loose-ing is `wear_log_id ON DELETE SET NULL` in the schema.
+- [x] **3.3 Log compliment sheet** — attach to a recent wear or leave loose; optional who / comment; date; Save → Compliment. *Compliment appears on the bottle.* — verified: count → 1, appears in the Compliments list.
+- [x] **3.4 Delete compliment** — with confirm. *Compliment removed.* — verified end to end.
+- [x] **3.5 Wire quick-log** — connect the 2.3 context-menu entries to these sheets. *Long-press → log works end to end.* — card `.contextMenu` presents the real sheets; `onLogged` refreshes the grid.
+- [x] **3.6 Location permission** — request for weather; graceful fallback if denied (log without weather). *No blocking if permission is refused.* — `LocationProvider` (one-shot, 8s + 30s timeouts) + `WeatherService` (OpenWeather). No key configured yet → sheet shows "Weather unavailable — logging without it" and saves fine. `NSLocationWhenInUseUsageDescription` added; `OPENWEATHER_API_KEY` is an optional secret.
 
 ---
 

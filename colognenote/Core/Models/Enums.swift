@@ -56,4 +56,11 @@ enum Occasion: String, Codable, CaseIterable, Sendable {
     case formal
     case casual
     case nightOut = "night_out"
+
+    var label: String {
+        switch self {
+        case .nightOut: "Night out"
+        default:        rawValue.capitalized
+        }
+    }
 }

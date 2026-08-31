@@ -45,10 +45,12 @@ struct CollectionView: View {
             AddFragranceView()
         }
         .sheet(isPresented: $showSettings) { SettingsView() }
-        .sheet(item: $quickLog, onDismiss: { Task { await model.load() } }) { which in
+        .sheet(item: $quickLog) { which in
             switch which {
-            case .wear(let id):       LogWearView(itemID: id)
-            case .compliment(let id): LogComplimentView(itemID: id)
+            case .wear(let id):
+                LogWearView(itemID: id) { Task { await model.load() } }
+            case .compliment(let id):
+                LogComplimentView(itemID: id) { Task { await model.load() } }
             }
         }
         .task { await model.load() }
